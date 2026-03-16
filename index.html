@@ -177,7 +177,7 @@
 
         const apiAllData = 'https://script.google.com/macros/s/AKfycbzcwvL8OPJUjPLV9aMVLP4Wfpslwb_0iAj59pG8YHRCFsgVzoAlZTSB2LLZCbfiLeh-2w/exec';
         const apiChosenData = 'https://script.google.com/macros/s/AKfycbzFVWXI8D2_A3jrQ8oCwmRBIT1SEYzC4Hh5LiGhwOjsQNu97d5rQqicd2vdgJahaU8h/exec';
-        const apiPostData = 'https://script.google.com/macros/s/AKfycbyFFVxs21lVtAxenL4OYgwIMSz5Kq4Vvkmy6yiXBeJuk2HeqzMDqP3vPkXgmWU9q2KJ/exec';
+        const apiPostData = 'https://script.google.com/macros/s/AKfycbwlUqVwFkWktWJBVd2sWym7_G6NG5wlV-XGq-PX2ol6jd8mPWnkEXW3Fycb_oMC_Dw/exec';
         
         const elHtml = document.querySelector('html');
         const elName = document.querySelector('#form-horizontal-name');
@@ -241,7 +241,7 @@
             const stringQuery = `?no=${elNo.value.trim()}&session=${elSession.value.trim()}&name=${encodeURI(elName.value.trim())}&flower=${document.querySelector('[name=flower]:checked').value}&timestamp=${new Date()}`;
 
             var xhr = new XMLHttpRequest();
-            xhr.open('post', apiPostData + stringQuery, true);
+            xhr.open('get', apiPostData + stringQuery, true);
             xhr.setRequestHeader('Content-type', 'text/plain; charset=utf-8');
             xhr.send();
             xhr.onload = function (res) {
