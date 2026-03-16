@@ -1,12 +1,370 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-gb" dir="ltr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-    <link rel="stylesheet" href="uikit.min.css">
+    <meta charset="utf-8">
+    <title>中華花藝</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:site" content="@中華花藝">
+    <meta name="twitter:image" content="http://www.florist.org.tw/images/logo-wide.png">
+    <meta property="og:locale" content="zh-TW">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="中華花藝">
+    <meta property="og:description" content="中華花藝-選擇畢業展花型">
+    <meta property="og:url" content="http://www.florist.org.tw/">
+    <meta property="og:site_name" content="中華花藝">
+    <meta property="og:image" content="http://www.florist.org.tw/images/logo-wide.png">
+    <link rel="shortcut icon" href="http://www.florist.org.tw/images/favicon.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.pnghttp://www.florist.org.tw/images/favicon.png">
+    <link rel="stylesheet" href="uikit.min.css" />
+    <style>
+        html {
+            font-size: 20px;
+        }
+
+        h4 {
+            color: #fff !important;
+        }
+
+        .uk-checkbox,
+        .uk-radio {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-top: 0;
+        }
+
+        .onloading td {
+            height: 160px;
+            vertical-align: bottom !important;
+            background: url(https://cdn.dribbble.com/users/2014028/screenshots/4337298/media/5a2a7b85394410a654ea5faeee8dd88d.gif) no-repeat center center;
+            background-size: 200px;
+        }
+
+        .onloading tr:hover td {
+            background-color: #fff;
+        }
+
+        #canBeChooseDatas,
+        #chosenDatas {
+            transition: opacity .25s ease-in;
+            opacity: 0;
+        }
+
+        #canBeChooseDatas.animateShow,
+        #chosenDatas.animateShow {
+            opacity: 1;
+        }
+
+        #chosenDatasWrapper {
+            width: 400px;
+            max-width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            box-shadow: 0 0 2rem rgba(0, 0, 0, .25);
+        }
+
+        .uk-label {
+            width: 4.5rem;
+        }
+
+        .secContainer {
+            padding-bottom: 100px;
+        }
+
+        #btnSubmit {
+            position: fixed;
+            bottom: 0;
+            left: 12%;
+        }
+
+        #btnSubmit:disabled {
+            background: #fff;
+        }
+
+        @media screen and (max-width:700px) {
+            #btnSubmit {
+                left: 0;
+            }
+        }
+
+        @media screen and (max-width:414px) {
+            h4 {
+                text-align: center;
+            }
+
+            #btnSubmit {
+                bottom: 220px;
+                left: 50%;
+                transform: translate(-50%, 10px);
+            }
+
+            .secContainer {
+                padding-bottom: 300px;
+            }
+        }
+
+        @media screen and (max-width:480px) {
+            #chosenDatasWrapper {
+                width: 100vw;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Welcome to Floral Arts</h1>
+    <div>
+        <h4 class="uk-background-primary uk-light uk-padding-small">中華花藝-選擇2026畢業展花型</h4>
+        <header class="uk-container uk-container-small">
+            <div class="uk-column-1-2@s">
+                <div class="uk-margin-small-bottom uk-flex uk-flex-middle">
+                    <label class="uk-width-auto uk-margin-right uk-text-primary"
+                        for="form-horizontal-name">請輸入您的大名</label>
+                    <div class="uk-form-controls uk-flex-1">
+                        <input class="uk-input uk-width-1-1" id="form-horizontal-name" type="text" placeholder="...">
+                    </div>
+                </div>
+                <div class="uk-margin-small-bottom uk-flex uk-flex-middle">
+                    <label class="uk-width-auto uk-margin-right uk-text-primary"
+                        for="form-horizontal-no">請輸入會員編號</label>
+                    <div class="uk-form-controls uk-flex-1">
+                        <input class="uk-input uk-width-1-1" id="form-horizontal-no" type="text" inputmode="numeric" maxlength="7" placeholder="...">
+                    </div>
+                </div>
+                <div class="uk-margin-small-bottom uk-flex uk-flex-middle">
+                    <label class="uk-width-auto uk-margin-right uk-text-primary"
+                        for="form-horizontal-no">您是第幾屆的呢</label>
+                    <div class="uk-form-controls uk-flex-1">
+                        <input class="uk-input uk-width-1-1" id="form-horizontal-session" type="text" placeholder="...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-margin-small-bottom uk-margin-top  uk-flex uk-flex-middle">
+                <label class="uk-width-auto uk-margin-right uk-text-primary" for="form-horizontal-no">可以選的花型有<span
+                        id="countCanBeChooseDatas"></span></label>
+            </div>
+        </header>
+        <section class="uk-container uk-container-small secContainer">
+            <div class="uk-overflow-auto">
+                <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
+                    <thead>
+                    </thead>
+                    <tbody class="onloading">
+                        <tr>
+                            <td class="uk-text-center">花型更新中</td>
+                        </tr>
+                    </tbody>
+                    <tbody id="canBeChooseDatas"></tbody>
+                </table>
+            </div>
+            <div class="uk-text-center">
+                <button id="btnSubmit" class="uk-button  uk-button-large uk-button-primary uk-hidden ">確定送出</button>
+            </div>
+
+            <div id="chosenDatasWrapper" class="uk-position-fixed uk-position-bottom-right uk-flex uk-flex-column">
+                <span class="uk-label uk-margin-left uk-margin-top">有人選過的</span>
+                <div class="onloading uk-margin-left uk-margin-bottom uk-margin-small-top">花型更新中</div>
+                <ul id="chosenDatas"
+                    class="uk-list uk-list-divider uk-margin-remove-top  uk-padding-small uk-flex-1 uk-overflow-auto">
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+
+        const apiAllData = 'https://script.google.com/macros/s/AKfycbzcwvL8OPJUjPLV9aMVLP4Wfpslwb_0iAj59pG8YHRCFsgVzoAlZTSB2LLZCbfiLeh-2w/exec';
+        const apiChosenData = 'https://script.google.com/macros/s/AKfycbzFVWXI8D2_A3jrQ8oCwmRBIT1SEYzC4Hh5LiGhwOjsQNu97d5rQqicd2vdgJahaU8h/exec';
+        const apiPostData = 'https://script.google.com/macros/s/AKfycbyFFVxs21lVtAxenL4OYgwIMSz5Kq4Vvkmy6yiXBeJuk2HeqzMDqP3vPkXgmWU9q2KJ/exec';
+        
+        const elHtml = document.querySelector('html');
+        const elName = document.querySelector('#form-horizontal-name');
+        const elNo = document.querySelector('#form-horizontal-no');
+        const elSession = document.querySelector('#form-horizontal-session');
+
+        const elSubmit = document.querySelector('#btnSubmit');
+        const elLoading = document.querySelectorAll('.onloading');
+        const elCanBeChooseDatas = document.querySelector('#canBeChooseDatas');
+        const elCount = document.querySelector('#countCanBeChooseDatas');
+        const elChosenDatas = document.querySelector('#chosenDatas');
+
+        getAllData();
+
+        elSubmit.addEventListener('click', function () {
+
+            if (elName.value.trim() === '') {
+                alert('請輸入您的大名');
+                elName.focus();
+                return;
+            }
+
+            if (elNo.value.trim() === '') {
+                alert('請輸入會員編號');
+                elNo.focus();
+                return;
+            }
+            else{
+                
+                const hasRepeat = Array.from(document.querySelectorAll('.author')).some(x=>{
+                    return x.textContent === elNo.value.trim()
+                })
+
+                if(hasRepeat){
+                    alert('您已經填過了喔\n若要取消上次選的花型，請致電教學組\n\n02-2758-5222#22');
+                    return;
+                }
+
+            }
+
+            if (elSession.value.trim() === '') {
+                alert('請輸入您是第幾屆的呢');
+                elSession.focus();
+                return;
+            }
+
+            const el = document.querySelector('[name=flower]:checked');
+            if (el === null) {
+                alert('請選擇一種花型');
+                return;
+            }
+
+            alert('資料送出中');
+            postData();
+
+        });
+
+        function postData() {
+
+            elSubmit.disabled = true;
+            const stringQuery = `?no=${elNo.value.trim()}&session=${elSession.value.trim()}&name=${encodeURI(elName.value.trim())}&flower=${document.querySelector('[name=flower]:checked').value}&timestamp=${new Date()}`;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', apiPostData + stringQuery, true);
+            xhr.setRequestHeader('Content-type', 'text/plain; charset=utf-8');
+            xhr.send();
+            xhr.onload = function (res) {
+                var jsonRes = JSON.parse(xhr.responseText);
+                alert(jsonRes.result);
+                getAllData();
+                elNo.value = '';
+                elSession.value = '';
+                elName.value = '';
+                elSubmit.disabled = false;
+                elHtml.scrollTop = 0;
+            }
+
+        }
+        
+        function getAllData() {
+            _onloading(true);
+
+            fetch(apiAllData, { method: 'get' })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    else {
+                        throw new Error(response.statusText);
+                    }
+                })
+                .then(function (allData) {
+                    getChosenData(allData);
+                }).catch(function (err) {
+                    // Error :(
+                })
+        }
+
+        function getChosenData(aryAllData = []) {
+            fetch(apiChosenData, { method: 'get' })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    else {
+                        throw new Error(response.statusText);
+                    }
+                })
+                .then(function (data) {
+                    const reverseData = JSON.parse(JSON.stringify(data)).reverse();
+
+                    // 被選過的
+                    let chosenHtml = '';
+                    reverseData.forEach((x, index) => {
+                        if (index !== reverseData.length - 1) {
+                            chosenHtml += `<li class="item-data uk-margin-remove uk-padding-remove">
+                                    【<span class="author">${x[1]}</span>】
+                                    <span class="flower">${x[4]}</span>
+                                    </li>`
+                        }
+                    });
+                    elChosenDatas.innerHTML = chosenHtml;
+
+                    const formatData = data.map((x, index) => {
+                        return x[4]
+                    });
+
+                    formatData.splice(0, 1);
+
+                    // 可以選的
+                    const canBeChooseDatas = [];
+                    let canBeChooseHtml = '';
+
+                    aryAllData.filter((x, index) => {
+                        if (formatData.indexOf(x[0]) === -1) {
+                            canBeChooseHtml += `<tr class="item-data">
+                                <td class="uk-padding-remove">
+                                    <div class="uk-padding-small uk-flex uk-flex-middle">
+                                        <input type="radio" class="uk-radio uk-margin-right" name="flower" value="${x[0]}" aria-label="Checkbox"id="chk${index}" />
+                                        <label for="chk${index}" class="uk-flex-1">${x[0]}</label>    
+                                    </div>
+                                </td>
+                            </tr>`
+                        }
+                    });
+
+                    elCanBeChooseDatas.innerHTML = canBeChooseHtml;
+                    elCount.innerHTML = (aryAllData.length - (reverseData.length - 1)) + (aryAllData.length ? '種：' : '');
+
+                    _onloading(false);
+
+
+                }).catch(function (err) {
+                    // Error :(
+                })
+        }
+
+
+        /**
+         * 更新資料中
+         * @param {boolean} doLoading - true=要更新 || false=不要更新
+         */
+        function _onloading(doLoading = false) {
+            if (doLoading) {
+                Array.from(elLoading).forEach((x) => {
+                    x.classList.remove('uk-hidden');
+                })
+                elCanBeChooseDatas.classList.add('uk-hidden');
+                elSubmit.classList.add('uk-hidden');
+                elChosenDatas.classList.add('uk-hidden');
+            }
+            else {
+                Array.from(elLoading).forEach((x) => {
+                    x.classList.add('uk-hidden');
+                })
+                elCanBeChooseDatas.classList.remove('uk-hidden');
+                elSubmit.classList.remove('uk-hidden');
+                elChosenDatas.classList.remove('uk-hidden');
+                elHtml.scrollTop = 0;
+                setTimeout(function () {
+                    elCanBeChooseDatas.classList.add('animateShow');
+                    elChosenDatas.classList.add('animateShow');
+                }, 500)
+            }
+        }
+
+    </script>
 </body>
+
 </html>
