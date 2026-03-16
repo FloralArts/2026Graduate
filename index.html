@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW" dir="ltr">
+<html lang="en-gb" dir="ltr">
 
 <head>
     <meta charset="utf-8">
@@ -16,8 +16,8 @@
     <meta property="og:site_name" content="中華花藝">
     <meta property="og:image" content="http://www.florist.org.tw/images/logo-wide.png">
     <link rel="shortcut icon" href="http://www.florist.org.tw/images/favicon.png">
-    <link rel="apple-touch-icon" href="http://www.florist.org.tw/images/favicon.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.24/dist/css/uikit.min.css" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.pnghttp://www.florist.org.tw/images/favicon.png">
+    <link rel="stylesheet" href="uikit.min.css" />
     <style>
         html {
             font-size: 20px;
@@ -34,14 +34,15 @@
             margin-top: 0;
         }
 
-        /* 載入區塊樣式調整 */
-        .onloading {
-            min-height: 160px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: #666;
+        .onloading td {
+            height: 160px;
+            vertical-align: bottom !important;
+            background: url(https://cdn.dribbble.com/users/2014028/screenshots/4337298/media/5a2a7b85394410a654ea5faeee8dd88d.gif) no-repeat center center;
+            background-size: 200px;
+        }
+
+        .onloading tr:hover td {
+            background-color: #fff;
         }
 
         #canBeChooseDatas,
@@ -62,7 +63,6 @@
             overflow-y: auto;
             background: #fff;
             box-shadow: 0 0 2rem rgba(0, 0, 0, .25);
-            z-index: 100; /* 確保浮動在最上層 */
         }
 
         .uk-label {
@@ -77,19 +77,15 @@
             position: fixed;
             bottom: 0;
             left: 12%;
-            z-index: 99;
         }
 
         #btnSubmit:disabled {
-            background: #ccc;
-            color: #fff;
-            cursor: not-allowed;
+            background: #fff;
         }
 
         @media screen and (max-width:700px) {
             #btnSubmit {
                 left: 0;
-                width: 100%; /* 手機版按鈕填滿寬度更好按 */
             }
         }
 
@@ -97,12 +93,13 @@
             h4 {
                 text-align: center;
             }
+
             #btnSubmit {
                 bottom: 220px;
                 left: 50%;
                 transform: translate(-50%, 10px);
-                width: 90%;
             }
+
             .secContainer {
                 padding-bottom: 300px;
             }
@@ -137,220 +134,236 @@
                 </div>
                 <div class="uk-margin-small-bottom uk-flex uk-flex-middle">
                     <label class="uk-width-auto uk-margin-right uk-text-primary"
-                        for="form-horizontal-session">您是第幾屆的呢</label>
+                        for="form-horizontal-no">您是第幾屆的呢</label>
                     <div class="uk-form-controls uk-flex-1">
                         <input class="uk-input uk-width-1-1" id="form-horizontal-session" type="text" placeholder="...">
                     </div>
                 </div>
             </div>
 
-            <div class="uk-margin-small-bottom uk-margin-top uk-flex uk-flex-middle">
-                <label class="uk-width-auto uk-margin-right uk-text-primary">可以選的花型有<span
+            <div class="uk-margin-small-bottom uk-margin-top  uk-flex uk-flex-middle">
+                <label class="uk-width-auto uk-margin-right uk-text-primary" for="form-horizontal-no">可以選的花型有<span
                         id="countCanBeChooseDatas"></span></label>
             </div>
         </header>
-        
         <section class="uk-container uk-container-small secContainer">
             <div class="uk-overflow-auto">
                 <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
-                    <thead></thead>
-                    <tbody id="tableLoading" class="onloading">
+                    <thead>
+                    </thead>
+                    <tbody class="onloading">
                         <tr>
-                            <td class="uk-text-center uk-border-remove">
-                                <div uk-spinner></div>
-                                <div class="uk-margin-small-top">花型更新中...</div>
-                            </td>
+                            <td class="uk-text-center">花型更新中</td>
                         </tr>
                     </tbody>
-                    <tbody id="canBeChooseDatas" class="uk-hidden"></tbody>
+                    <tbody id="canBeChooseDatas"></tbody>
                 </table>
             </div>
-            
             <div class="uk-text-center">
-                <button id="btnSubmit" class="uk-button uk-button-large uk-button-primary uk-hidden">確定送出</button>
+                <button id="btnSubmit" class="uk-button  uk-button-large uk-button-primary uk-hidden ">確定送出</button>
             </div>
 
             <div id="chosenDatasWrapper" class="uk-position-fixed uk-position-bottom-right uk-flex uk-flex-column">
                 <span class="uk-label uk-margin-left uk-margin-top">有人選過的</span>
-                <div id="listLoading" class="onloading uk-margin-left uk-margin-bottom uk-margin-small-top">
-                    <div uk-spinner="ratio: 0.8"></div>
-                </div>
-                <ul id="chosenDatas" class="uk-list uk-list-divider uk-margin-remove-top uk-padding-small uk-flex-1 uk-overflow-auto uk-hidden">
+                <div class="onloading uk-margin-left uk-margin-bottom uk-margin-small-top">花型更新中</div>
+                <ul id="chosenDatas"
+                    class="uk-list uk-list-divider uk-margin-remove-top  uk-padding-small uk-flex-1 uk-overflow-auto">
                 </ul>
             </div>
         </section>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.24/dist/js/uikit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.24/dist/js/uikit-icons.min.js"></script>
-
     <script>
+
         const apiAllData = 'https://script.google.com/macros/s/AKfycbzcwvL8OPJUjPLV9aMVLP4Wfpslwb_0iAj59pG8YHRCFsgVzoAlZTSB2LLZCbfiLeh-2w/exec';
         const apiChosenData = 'https://script.google.com/macros/s/AKfycbzFVWXI8D2_A3jrQ8oCwmRBIT1SEYzC4Hh5LiGhwOjsQNu97d5rQqicd2vdgJahaU8h/exec';
         const apiPostData = 'https://script.google.com/macros/s/AKfycbwlUqVwFkWktWJBVd2sWym7_G6NG5wlV-XGq-PX2ol6jd8mPWnkEXW3Fycb_oMC_Dw/exec';
         
+        const elHtml = document.querySelector('html');
         const elName = document.querySelector('#form-horizontal-name');
         const elNo = document.querySelector('#form-horizontal-no');
         const elSession = document.querySelector('#form-horizontal-session');
+
         const elSubmit = document.querySelector('#btnSubmit');
+        const elLoading = document.querySelectorAll('.onloading');
         const elCanBeChooseDatas = document.querySelector('#canBeChooseDatas');
         const elCount = document.querySelector('#countCanBeChooseDatas');
         const elChosenDatas = document.querySelector('#chosenDatas');
-        const elLoadings = document.querySelectorAll('.onloading');
 
-        // 初始化載入資料
-        initData();
+        getAllData();
 
-        elSubmit.addEventListener('click', async () => {
-            const nameVal = elName.value.trim();
-            const noVal = elNo.value.trim();
-            const sessionVal = elSession.value.trim();
+        elSubmit.addEventListener('click', function () {
 
-            if (!nameVal) return alertFocus('請輸入您的大名', elName);
-            if (!noVal) return alertFocus('請輸入會員編號', elNo);
-            
-            // 檢查是否重複報名
-            const hasRepeat = [...document.querySelectorAll('.author')].some(x => x.textContent === noVal);
-            if (hasRepeat) {
-                alert('您已經填過了喔\n若要取消上次選的花型，請致電教學組\n\n02-2758-5222#22');
+            if (elName.value.trim() === '') {
+                alert('請輸入您的大名');
+                elName.focus();
                 return;
             }
 
-            if (!sessionVal) return alertFocus('請輸入您是第幾屆的呢', elSession);
+            if (elNo.value.trim() === '') {
+                alert('請輸入會員編號');
+                elNo.focus();
+                return;
+            }
+            else{
+                
+                const hasRepeat = Array.from(document.querySelectorAll('.author')).some(x=>{
+                    return x.textContent === elNo.value.trim()
+                })
 
-            const selectedFlowerEl = document.querySelector('[name=flower]:checked');
-            if (!selectedFlowerEl) {
+                if(hasRepeat){
+                    alert('您已經填過了喔\n若要取消上次選的花型，請致電教學組\n\n02-2758-5222#22');
+                    return;
+                }
+
+            }
+
+            if (elSession.value.trim() === '') {
+                alert('請輸入您是第幾屆的呢');
+                elSession.focus();
+                return;
+            }
+
+            const el = document.querySelector('[name=flower]:checked');
+            if (el === null) {
                 alert('請選擇一種花型');
                 return;
             }
 
-            alert('資料送出中，請稍候...');
-            await postData(nameVal, noVal, sessionVal, selectedFlowerEl.value);
+            alert('資料送出中');
+            postData();
+
         });
 
-        // 輔助函式：跳出警告並聚焦輸入框
-        function alertFocus(msg, element) {
-            alert(msg);
-            element.focus();
-        }
+        function postData() {
 
-        async function postData(name, no, session, flower) {
             elSubmit.disabled = true;
-            elSubmit.textContent = '送出中...';
+            const stringQuery = `?no=${elNo.value.trim()}&session=${elSession.value.trim()}&name=${encodeURI(elName.value.trim())}&flower=${document.querySelector('[name=flower]:checked').value}&timestamp=${new Date()}`;
 
-            const params = new URLSearchParams({
-                no: no,
-                session: session,
-                name: name,
-                flower: flower,
-                timestamp: new Date().toISOString()
-            });
-
-            try {
-                const response = await fetch(`${apiPostData}?${params.toString()}`);
-                const jsonRes = await response.json();
-                
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', apiPostData + stringQuery, true);
+            xhr.setRequestHeader('Content-type', 'text/plain; charset=utf-8');
+            xhr.send();
+            xhr.onload = function (res) {
+                var jsonRes = JSON.parse(xhr.responseText);
                 alert(jsonRes.result);
-                
-                // 清空表單
+                getAllData();
                 elNo.value = '';
                 elSession.value = '';
                 elName.value = '';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                // 重新載入資料
-                await initData();
-            } catch (err) {
-                console.error('Submit Error:', err);
-                alert('資料送出失敗，請稍後再試。');
-            } finally {
                 elSubmit.disabled = false;
-                elSubmit.textContent = '確定送出';
+                elHtml.scrollTop = 0;
             }
+
         }
         
-        async function initData() {
-            toggleLoading(true);
+        function getAllData() {
+            _onloading(true);
 
-            try {
-                // 平行發送兩個請求，節省等待時間
-                const [allDataRes, chosenDataRes] = await Promise.all([
-                    fetch(apiAllData),
-                    fetch(apiChosenData)
-                ]);
-
-                if (!allDataRes.ok || !chosenDataRes.ok) throw new Error('API 請求失敗');
-
-                const aryAllData = await allDataRes.json();
-                const chosenData = await chosenDataRes.json();
-
-                renderData(aryAllData, chosenData);
-            } catch (err) {
-                console.error('Fetch Error:', err);
-                alert('載入花型資料失敗，請重新整理頁面。');
-            } finally {
-                toggleLoading(false);
-            }
+            fetch(apiAllData, { method: 'get' })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    else {
+                        throw new Error(response.statusText);
+                    }
+                })
+                .then(function (allData) {
+                    getChosenData(allData);
+                }).catch(function (err) {
+                    // Error :(
+                })
         }
 
-        function renderData(aryAllData, chosenData) {
-            // 處理被選過的資料 (排除標題列)
-            const reverseData = [...chosenData].reverse();
-            // 扣除標題列的那一筆
-            const validChosenData = reverseData.slice(1);
+        function getChosenData(aryAllData = []) {
+            fetch(apiChosenData, { method: 'get' })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    else {
+                        throw new Error(response.statusText);
+                    }
+                })
+                .then(function (data) {
+                    const reverseData = JSON.parse(JSON.stringify(data)).reverse();
 
-            // 1. 渲染：有人選過的花型清單
-            elChosenDatas.innerHTML = validChosenData.map(x => `
-                <li class="item-data uk-margin-remove uk-padding-remove">
-                    【<span class="author">${x[1]}</span>】
-                    <span class="flower">${x[4]}</span>
-                </li>
-            `).join('');
+                    // 被選過的
+                    let chosenHtml = '';
+                    reverseData.forEach((x, index) => {
+                        if (index !== reverseData.length - 1) {
+                            chosenHtml += `<li class="item-data uk-margin-remove uk-padding-remove">
+                                    【<span class="author">${x[1]}</span>】
+                                    <span class="flower">${x[4]}</span>
+                                    </li>`
+                        }
+                    });
+                    elChosenDatas.innerHTML = chosenHtml;
 
-            // 取得已被選過的花型名稱陣列 (排除標題)
-            const chosenFlowerNames = chosenData.slice(1).map(x => x[4]);
+                    const formatData = data.map((x, index) => {
+                        return x[4]
+                    });
 
-            // 2. 渲染：可以選的花型 (過濾掉已選)
-            const availableFlowers = aryAllData.filter(x => !chosenFlowerNames.includes(x[0]));
-            
-            elCanBeChooseDatas.innerHTML = availableFlowers.map((x, index) => `
-                <tr class="item-data">
-                    <td class="uk-padding-remove">
-                        <label class="uk-padding-small uk-flex uk-flex-middle" style="cursor: pointer;">
-                            <input type="radio" class="uk-radio uk-margin-right" name="flower" value="${x[0]}" id="chk${index}" />
-                            <span class="uk-flex-1">${x[0]}</span>
-                        </label>
-                    </td>
-                </tr>
-            `).join('');
+                    formatData.splice(0, 1);
 
-            // 更新數量
-            elCount.innerHTML = availableFlowers.length + (aryAllData.length ? ' 種：' : '');
+                    // 可以選的
+                    const canBeChooseDatas = [];
+                    let canBeChooseHtml = '';
+
+                    aryAllData.filter((x, index) => {
+                        if (formatData.indexOf(x[0]) === -1) {
+                            canBeChooseHtml += `<tr class="item-data">
+                                <td class="uk-padding-remove">
+                                    <div class="uk-padding-small uk-flex uk-flex-middle">
+                                        <input type="radio" class="uk-radio uk-margin-right" name="flower" value="${x[0]}" aria-label="Checkbox"id="chk${index}" />
+                                        <label for="chk${index}" class="uk-flex-1">${x[0]}</label>    
+                                    </div>
+                                </td>
+                            </tr>`
+                        }
+                    });
+
+                    elCanBeChooseDatas.innerHTML = canBeChooseHtml;
+                    elCount.innerHTML = (aryAllData.length - (reverseData.length - 1)) + (aryAllData.length ? '種：' : '');
+
+                    _onloading(false);
+
+
+                }).catch(function (err) {
+                    // Error :(
+                })
         }
+
 
         /**
-         * 控制載入動畫顯示隱藏
-         * @param {boolean} isLoading - true=顯示載入中 || false=顯示資料
+         * 更新資料中
+         * @param {boolean} doLoading - true=要更新 || false=不要更新
          */
-        function toggleLoading(isLoading) {
-            if (isLoading) {
-                elLoadings.forEach(x => x.classList.remove('uk-hidden'));
-                elCanBeChooseDatas.classList.add('uk-hidden', 'uk-animation-fade');
+        function _onloading(doLoading = false) {
+            if (doLoading) {
+                Array.from(elLoading).forEach((x) => {
+                    x.classList.remove('uk-hidden');
+                })
+                elCanBeChooseDatas.classList.add('uk-hidden');
                 elSubmit.classList.add('uk-hidden');
-                elChosenDatas.classList.add('uk-hidden', 'uk-animation-fade');
-            } else {
-                elLoadings.forEach(x => x.classList.add('uk-hidden'));
+                elChosenDatas.classList.add('uk-hidden');
+            }
+            else {
+                Array.from(elLoading).forEach((x) => {
+                    x.classList.add('uk-hidden');
+                })
                 elCanBeChooseDatas.classList.remove('uk-hidden');
                 elSubmit.classList.remove('uk-hidden');
                 elChosenDatas.classList.remove('uk-hidden');
-                
-                // 加入淡入動畫效果
-                setTimeout(() => {
+                elHtml.scrollTop = 0;
+                setTimeout(function () {
                     elCanBeChooseDatas.classList.add('animateShow');
                     elChosenDatas.classList.add('animateShow');
-                }, 50);
+                }, 500)
             }
         }
+
     </script>
 </body>
 
